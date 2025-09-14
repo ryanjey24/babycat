@@ -9,65 +9,69 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
         }
         
         body {
-            font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: #fff;
             min-height: 100vh;
-            overflow-x: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            overflow-x: hidden;
         }
         
         .container {
             max-width: 800px;
             width: 100%;
-            background: rgba(30, 30, 50, 0.8);
+            background: rgba(30, 30, 50, 0.9);
             border-radius: 20px;
             padding: 30px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             position: relative;
             overflow: hidden;
             border: 3px solid #ff9ecb;
+            text-align: center;
         }
         
         .envelope {
-            position: relative;
             cursor: pointer;
-            text-align: center;
-            margin-bottom: 30px;
+            margin: 30px auto;
+            width: 200px;
             transition: transform 0.3s;
         }
         
         .envelope:hover {
-            transform: scale(1.05);
+            transform: scale(1.1);
         }
         
         .envelope-img {
-            width: 200px;
+            width: 100%;
             filter: drop-shadow(0 5px 15px rgba(255, 158, 203, 0.5));
         }
         
         .letter {
-            display: none;
             background: rgba(255, 240, 245, 0.95);
             color: #333;
             padding: 30px;
             border-radius: 15px;
-            margin-top: 20px;
+            margin: 20px auto;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
             border: 2px solid #ff9ecb;
-            position: relative;
+            max-width: 600px;
+            display: none;
+            text-align: left;
         }
         
         .letter-text {
             line-height: 1.8;
             font-size: 18px;
-            text-align: center;
+        }
+        
+        .letter-text p {
+            margin-bottom: 15px;
         }
         
         .signature {
@@ -79,9 +83,8 @@
         }
         
         h1 {
-            text-align: center;
             color: #ff6b9d;
-            margin-bottom: 30px;
+            margin: 20px 0;
             font-size: 36px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
@@ -103,7 +106,6 @@
             background: #ff6b9d;
             transform: rotate(45deg);
             opacity: 0;
-            animation: fall 5s linear infinite;
         }
         
         .heart:before, .heart:after {
@@ -123,17 +125,6 @@
         .heart:after {
             top: 0;
             left: -10px;
-        }
-        
-        @keyframes fall {
-            0% {
-                top: -10%;
-                opacity: 1;
-            }
-            100% {
-                top: 100%;
-                opacity: 0;
-            }
         }
         
         .kiss {
@@ -161,10 +152,17 @@
         }
         
         .instructions {
-            text-align: center;
-            margin-top: 20px;
+            margin: 15px 0;
             color: #ff9ecb;
             font-size: 16px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .visible {
+            display: block;
         }
         
         @media (max-width: 600px) {
@@ -186,7 +184,7 @@
     <div class="container">
         <h1>Happy 21st Birthday BabyCat! 🎂</h1>
         
-        <div class="envelope" onclick="openLetter()">
+        <div class="envelope" id="envelope">
             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSIjZmY5ZWNiIiBkPSJNNDU2LDgwSDYwQzQ4LjkyOCw4MCw0MCw4OC45MjgsNDAsMTAwdjI3MmMwLDExLjA3Miw4LjkyOCwyMCwyMCwyMGgzOTZjMTEuMDcyLDAsMjAtOC45MjgsMjAtMjBWMTIwQzQ4MCw4OC45MjgsNDcxLjA3Miw4MCw0NTYsODB6IE00NTYsMTQwTDI3OC4zNjgsMjk1LjQ4Yy00LjY0NCwzLjUzNi0xMS4zMTIsMy41MzYtMTUuOTU2LDBINTZWMTE2aDQwMFYxNDB6IiAvPjwvc3ZnPg==" alt="Envelope" class="envelope-img">
             <p class="instructions">Click the envelope to open your letter!</p>
         </div>
@@ -216,17 +214,76 @@
     <script>
         function openLetter() {
             const letter = document.getElementById('letter');
-            const envelope = document.querySelector('.envelope');
+            const envelope = document.getElementById('envelope');
             
-            if (letter.style.display === 'block') {
-                return;
-            }
+            // Hide envelope and show letter
+            envelope.classList.add('hidden');
+            letter.classList.add('visible');
             
-            letter.style.display = 'block';
-            envelope.style.display = 'none';
-            
+            // Create falling hearts
             createHearts();
-            createKisses();
             
             // Play meow sound
-            const audio = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAEluZm8AAAAPAAAAAwAAAbkAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAUHg//M4wDsAAAaPAUAAAAMExBTQIggKEggBNAYEBgECBgQCBgQGAQIGAgIGAQIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAgIGAg
+            playMeow();
+        }
+        
+        function createHearts() {
+            const heartsContainer = document.getElementById('hearts');
+            heartsContainer.innerHTML = '';
+            
+            for (let i = 0; i < 30; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                
+                // Random position and animation delay
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animation = `fall ${4 + Math.random() * 4}s linear ${Math.random() * 5}s infinite`;
+                
+                heartsContainer.appendChild(heart);
+            }
+        }
+        
+        function playMeow() {
+            // Create meow sound using audio oscillator
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.type = 'sawtooth';
+            oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.3);
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.3);
+        }
+        
+        // Add falling animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fall {
+                0% {
+                    top: -10%;
+                    opacity: 1;
+                }
+                100% {
+                    top: 100%;
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Make envelope clickable
+        document.getElementById('envelope').addEventListener('click', openLetter);
+        
+        // Initial creation of some hearts
+        createHearts();
+    </script>
+</body>
+</html>
